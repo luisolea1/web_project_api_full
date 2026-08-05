@@ -62,16 +62,16 @@ const createUser = (req, res) => {
     name, about, avatar, email, password,
   } = req.body;
 
-  if (!email || !password) {
+  if (typeof email !== 'string' || typeof password !== 'string' || !email || !password) {
     res.status(ERROR_BAD_REQUEST).json({ message: 'Email and password are required' });
     return;
   }
 
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
-      name,
-      about,
-      avatar,
+      name: name || undefined,
+      about: about || undefined,
+      avatar: avatar || undefined,
       email,
       password: hash,
     }))
@@ -92,7 +92,7 @@ const createUser = (req, res) => {
 const login = (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
+  if (typeof email !== 'string' || typeof password !== 'string' || !email || !password) {
     res.status(ERROR_UNAUTHORIZED).json({ message: 'Incorrect email or password' });
     return;
   }

@@ -37,17 +37,16 @@ const deleteCard = (req, res) => {
     .then((card) => {
       if (!card) {
         res.status(ERROR_NOT_FOUND).json({ message: 'Requested resource not found' });
-        return;
+        return null;
       }
 
       if (card.owner.toString() !== req.user._id.toString()) {
         res.status(ERROR_FORBIDDEN).json({ message: 'You cannot delete another user\'s card' });
-        return;
+        return null;
       }
 
       return card.deleteOne()
-        .then(() => res.json({ message: 'Card deleted successfully' }))
-        .catch((err) => handleCardError(err, res));
+        .then(() => res.json({ message: 'Card deleted successfully' }));
     })
     .catch((err) => handleCardError(err, res));
 };

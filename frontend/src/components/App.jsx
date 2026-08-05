@@ -28,7 +28,9 @@ function App() {
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState("");
-  const [isCheckingToken, setIsCheckingToken] = useState(true);
+  const [isCheckingToken, setIsCheckingToken] = useState(
+    () => Boolean(localStorage.getItem("jwt")),
+  );
 
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -36,8 +38,6 @@ function App() {
 
   useEffect(() => {
     if (!loggedIn) {
-      setCurrentUser(null);
-      setCards([]);
       return;
     }
 
@@ -127,7 +127,7 @@ function App() {
 
 const handleRegister = (email, password) => {
   register(email, password)
-    .then((data) => {
+    .then(() => {
       setIsSuccess(true);
       setInfoTooltipMessage("¡Correcto! Ya estás registrado.");
       setIsInfoTooltipOpen(true);
@@ -177,6 +177,8 @@ const handleSignOut = () => {
 
   setLoggedIn(false);
   setEmail("");
+  setCurrentUser(null);
+  setCards([]);
 
   navigate("/signin");
 };
@@ -185,7 +187,6 @@ useEffect(() => {
   const token = localStorage.getItem("jwt");
 
   if (!token) {
-    setIsCheckingToken(false);
     return;
   }
 

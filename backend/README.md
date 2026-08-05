@@ -1,22 +1,23 @@
-# Tripleten web_project_around_express
+# Back-end de Around the U.S.
 
-Una API REST para un proyecto de galería de fotos. Desarrollada con Node.js y Express.
+API REST de usuarios y tarjetas protegida mediante JWT.
 
-## Funcionalidades
+## Desarrollo local
 
-- **Gestión de Usuarios**: Obtener y actualizar información de usuario
-- **Gestión de Tarjetas**: Crear, obtener, eliminar y gestionar tarjetas de imágenes
-- **Sistema de Likes**: Agregar y quitar likes a tarjetas
+```bash
+pnpm install
+pnpm dev
+```
 
-## Tecnologías Utilizadas
+El servidor usa `mongodb://localhost:27017/aroundb` y escucha en
+`http://localhost:3000`. Para desarrollo no necesita un archivo `.env`; la clave
+JWT de desarrollo está definida en el código.
 
-- **Node.js**: Runtime de JavaScript
-- **Express**: Framework web minimalista
-- **fs**: Módulo para lectura/escritura de archivos
-- **path**: Módulo para manejo de rutas de archivos
-- **ESLint**: Linter para mantener código limpio
-- **Nodemon**: Hot reload durante desarrollo
+## Comandos
 
+- `pnpm start`: inicia el servidor.
+- `pnpm dev`: inicia el servidor con recarga automática.
+- `pnpm lint`: verifica el estilo del código.
 
-
-El servidor se ejecutará en `http://localhost:3000`
+Consulta el [README principal](../README.md) para conocer la funcionalidad y la
+estructura completa.
