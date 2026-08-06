@@ -59,7 +59,9 @@ pnpm dev
 ```
 
 El front-end estará disponible en `http://localhost:5173` y la API en
-`http://localhost:3000`. No se requiere un archivo `.env` para desarrollo.
+`http://localhost:3000`. No se requiere un archivo `.env` para desarrollo. Las
+variables disponibles están documentadas en `backend/.env.example`; producción
+requiere una clave `JWT_SECRET` propia.
 
 ## Capturas
 

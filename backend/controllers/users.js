@@ -7,8 +7,7 @@ const {
   NotFoundError,
   UnauthorizedError,
 } = require('../errors');
-
-const JWT_SECRET = process.env.JWT_SECRET || 'around-the-us-development-secret';
+const { JWT_SECRET } = require('../config');
 
 const sendUser = (res, user, status = 200) => {
   const safeUser = user.toObject();
