@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { createUser, login } = require('../controllers/users');
 const auth = require('../middlewares/auth');
+const errorHandler = require('../middlewares/error-handler');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'around-the-us-development-secret';
 
@@ -31,6 +32,10 @@ const createResponse = () => {
   return { res, completed };
 };
 
+const handleWithMiddleware = (res) => (err) => {
+  errorHandler(err, {}, res, () => {});
+};
+
 test('createUser cifra la contraseña y no la devuelve', async (t) => {
   const originalCreate = User.create;
   t.after(() => {
@@ -53,6 +58,7 @@ test('createUser cifra la contraseña y no la devuelve', async (t) => {
   createUser(
     { body: { email: 'persona@example.com', password: 'segura123' } },
     res,
+    handleWithMiddleware(res),
   );
   const response = await completed;
 
@@ -79,6 +85,7 @@ test('createUser responde 409 si el correo ya existe', async (t) => {
   createUser(
     { body: { email: 'persona@example.com', password: 'segura123' } },
     res,
+    handleWithMiddleware(res),
   );
   const response = await completed;
 
@@ -106,6 +113,7 @@ test('login entrega un JWT válido para credenciales correctas', async (t) => {
   login(
     { body: { email: 'persona@example.com', password: 'segura123' } },
     res,
+    handleWithMiddleware(res),
   );
   const response = await completed;
   const payload = jwt.verify(response.body.token, JWT_SECRET);
@@ -132,6 +140,7 @@ test('login rechaza una contraseña incorrecta', async (t) => {
   login(
     { body: { email: 'persona@example.com', password: 'incorrecta' } },
     res,
+    handleWithMiddleware(res),
   );
   const response = await completed;
 
@@ -160,14 +169,19 @@ test('auth rechaza tokens inválidos o ausentes', () => {
   [undefined, 'Bearer token-invalido'].forEach((authorization) => {
     const req = { headers: { authorization } };
     const { res } = createResponse();
-    let nextCalled = false;
 
-    auth(req, res, () => {
-      nextCalled = true;
-    });
+    auth(req, res, handleWithMiddleware(res));
 
-    assert.equal(nextCalled, false);
     assert.equal(res.statusCode, 401);
     assert.deepEqual(res.body, { message: 'Authorization required' });
   });
+});
+
+test('el manejador central oculta los detalles de errores internos', () => {
+  const { res } = createResponse();
+
+  errorHandler(new Error('database unavailable'), {}, res, () => {});
+
+  assert.equal(res.statusCode, 500);
+  assert.deepEqual(res.body, { message: 'An error has occurred on the server' });
 });
