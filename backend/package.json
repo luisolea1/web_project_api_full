@@ -1,19 +1,19 @@
 {
   "name": "web-project-api-full-backend",
   "version": "1.0.0",
-  "description": "",
-  "homepage": "https://github.com/luisolea1/web_project_around_express#readme",
+  "description": "API REST de Around the U.S. con autenticación JWT",
+  "homepage": "https://github.com/luisolea1/web_project_api_full#readme",
   "bugs": {
-    "url": "https://github.com/luisolea1/web_project_around_express/issues"
+    "url": "https://github.com/luisolea1/web_project_api_full/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/luisolea1/web_project_around_express.git"
+    "url": "git+https://github.com/luisolea1/web_project_api_full.git"
   },
   "license": "ISC",
   "author": "Luis Alberto Olea Olea",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
