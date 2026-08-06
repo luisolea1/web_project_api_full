@@ -6,6 +6,7 @@ const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/error-handler');
+const { errorLogger, requestLogger } = require('./middlewares/logger');
 const { NotFoundError } = require('./errors');
 const { createUser, login } = require('./controllers/users');
 const {
@@ -23,6 +24,7 @@ mongoose.connect(MONGO_URL)
 
 app.use(cors());
 app.use(express.json());
+app.use(requestLogger);
 
 app.post('/signin', validateLogin, login);
 app.post('/signup', validateCreateUser, createUser);
@@ -35,6 +37,7 @@ app.use((req, res, next) => {
   next(new NotFoundError('Requested resource not found'));
 });
 
+app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
 
