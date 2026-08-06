@@ -1,12 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const { errors } = require('celebrate');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/error-handler');
 const { NotFoundError } = require('./errors');
 const { createUser, login } = require('./controllers/users');
+const {
+  validateCreateUser,
+  validateLogin,
+} = require('./middlewares/validation');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,8 +24,8 @@ mongoose.connect(MONGO_URL)
 app.use(cors());
 app.use(express.json());
 
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', validateLogin, login);
+app.post('/signup', validateCreateUser, createUser);
 
 app.use(auth);
 app.use(usersRouter);
@@ -30,6 +35,7 @@ app.use((req, res, next) => {
   next(new NotFoundError('Requested resource not found'));
 });
 
+app.use(errors());
 app.use(errorHandler);
 
 if (require.main === module) {
