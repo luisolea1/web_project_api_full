@@ -24,6 +24,10 @@ lo requiera. El servidor se detiene al arrancar en producción si no existe
 - `pnpm start`: inicia el servidor.
 - `pnpm dev`: inicia el servidor con recarga automática.
 - `pnpm lint`: verifica el estilo del código.
+- `pnpm test`: ejecuta las pruebas automatizadas.
+
+La ruta `GET /crash-test` finaliza el proceso de forma deliberada y se utiliza
+únicamente para comprobar que PM2 reinicia la API durante el despliegue.
 
 Consulta el [README principal](../README.md) para conocer la funcionalidad y la
 estructura completa.
