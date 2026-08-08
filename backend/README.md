@@ -55,5 +55,23 @@ pm2 logs around-api --lines 50
 Después de la caída deliberada, `around-api` debe volver a aparecer con estado
 `online` y un contador de reinicios mayor.
 
+## Proxy inverso con Nginx
+
+La configuración HTTP utilizada para publicar la API se encuentra en
+[`../deploy/nginx/around-api.conf`](../deploy/nginx/around-api.conf). En el
+servidor se instala como un sitio de Nginx y se habilita mediante un enlace
+simbólico:
+
+```bash
+sudo cp ../deploy/nginx/around-api.conf /etc/nginx/sites-available/around-api
+sudo ln -s /etc/nginx/sites-available/around-api /etc/nginx/sites-enabled/around-api
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+Nginx recibe las solicitudes HTTP en el puerto 80 y las reenvía a PM2 en
+`127.0.0.1:3000`. El nombre del servidor se sustituirá por el dominio definitivo
+antes de configurar HTTPS.
+
 Consulta el [README principal](../README.md) para conocer la funcionalidad y la
 estructura completa.
