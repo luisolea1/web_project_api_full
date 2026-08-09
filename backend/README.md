@@ -74,5 +74,14 @@ y las reenvía a PM2 en `127.0.0.1:3000`. El mismo archivo publica el front-end
 desde `/var/www/around-frontend` para `aroundtw.mooo.com` y
 `www.aroundtw.mooo.com`.
 
+Los tres dominios usan un certificado TLS de Let's Encrypt. Certbot fuerza la
+redirección de HTTP a HTTPS y mantiene la renovación automática mediante su
+temporizador de systemd. La renovación puede comprobarse sin modificar el
+certificado actual con:
+
+```bash
+sudo certbot renew --dry-run
+```
+
 Consulta el [README principal](../README.md) para conocer la funcionalidad y la
 estructura completa.

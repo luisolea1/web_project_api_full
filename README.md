@@ -73,8 +73,13 @@ requiere una clave `JWT_SECRET` propia.
 
 ## URL de la aplicación
 
-La URL pública se añadirá durante la parte 2, correspondiente a configuración y
-despliegue.
+- Front-end: [https://aroundtw.mooo.com](https://aroundtw.mooo.com)
+- Alias `www`: [https://www.aroundtw.mooo.com](https://www.aroundtw.mooo.com)
+- API: [https://api.aroundtw.mooo.com](https://api.aroundtw.mooo.com)
+
+Nginx sirve el front-end, funciona como proxy inverso de la API y redirige todo
+el tráfico HTTP hacia HTTPS. Los certificados TLS de Let's Encrypt se renuevan
+automáticamente mediante Certbot.
 
 ## Autor
 
