@@ -69,9 +69,10 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-Nginx recibe las solicitudes HTTP en el puerto 80 y las reenvía a PM2 en
-`127.0.0.1:3000`. El nombre del servidor se sustituirá por el dominio definitivo
-antes de configurar HTTPS.
+Nginx recibe en `api.aroundtw.mooo.com` las solicitudes HTTP destinadas a la API
+y las reenvía a PM2 en `127.0.0.1:3000`. El mismo archivo publica el front-end
+desde `/var/www/around-frontend` para `aroundtw.mooo.com` y
+`www.aroundtw.mooo.com`.
 
 Consulta el [README principal](../README.md) para conocer la funcionalidad y la
 estructura completa.
