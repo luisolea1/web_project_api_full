@@ -114,7 +114,7 @@ const updateUserProfile = (req, res, next) => {
   return User.findByIdAndUpdate(
     req.user._id,
     { name, about },
-    { new: true, runValidators: true },
+    { returnDocument: 'after', runValidators: true },
   )
     .then((user) => {
       if (!user) {
@@ -137,7 +137,7 @@ const updateUserAvatar = (req, res, next) => {
   return User.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    { new: true, runValidators: true },
+    { returnDocument: 'after', runValidators: true },
   )
     .then((user) => {
       if (!user) {
