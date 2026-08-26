@@ -7,6 +7,16 @@ const logFormat = winston.format.combine(
   winston.format.json(),
 );
 
+const MAX_LOG_SIZE = 5 * 1024 * 1024;
+const MAX_LOG_FILES = 5;
+
+const createFileTransport = (filename) => new winston.transports.File({
+  filename: path.join(__dirname, '..', filename),
+  maxsize: MAX_LOG_SIZE,
+  maxFiles: MAX_LOG_FILES,
+  tailable: true,
+});
+
 const commonOptions = {
   format: logFormat,
   meta: true,
@@ -24,9 +34,7 @@ const commonOptions = {
 const requestLogger = expressWinston.logger({
   ...commonOptions,
   transports: [
-    new winston.transports.File({
-      filename: path.join(__dirname, '..', 'request.log'),
-    }),
+    createFileTransport('request.log'),
   ],
   msg: 'HTTP {{req.method}} {{req.url}}',
 });
@@ -34,9 +42,7 @@ const requestLogger = expressWinston.logger({
 const errorLogger = expressWinston.errorLogger({
   ...commonOptions,
   transports: [
-    new winston.transports.File({
-      filename: path.join(__dirname, '..', 'error.log'),
-    }),
+    createFileTransport('error.log'),
   ],
 });
 

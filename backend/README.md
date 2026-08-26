@@ -21,13 +21,10 @@ lo requiera. El servidor se detiene al arrancar en producción si no existe
 
 ## Comandos
 
-- `pnpm start`: inicia el servidor.
+- `pnpm start`: conecta MongoDB e inicia el servidor.
 - `pnpm dev`: inicia el servidor con recarga automática.
 - `pnpm lint`: verifica el estilo del código.
 - `pnpm test`: ejecuta las pruebas automatizadas.
-
-La ruta `GET /crash-test` finaliza el proceso de forma deliberada y se utiliza
-únicamente para comprobar que PM2 reinicia la API durante el despliegue.
 
 ## Ejecución con PM2
 
@@ -44,16 +41,16 @@ pm2 save
 ```
 
 `pm2 startup` muestra un comando adicional con privilegios elevados; ejecútalo
-exactamente como lo genere PM2. Para comprobar la recuperación automática:
+exactamente como lo genere PM2.
 
-```bash
-curl http://localhost:3000/crash-test
-pm2 status
-pm2 logs around-api --lines 50
-```
+PM2 espera a que MongoDB y el servidor HTTP estén listos antes de marcar el
+proceso como `online`. Si la conexión inicial falla, aplica esperas crecientes
+entre reinicios para no saturar MongoDB. Al detener o reiniciar el proceso, la
+API deja de aceptar solicitudes y cierra ordenadamente la conexión a la base de
+datos.
 
-Después de la caída deliberada, `around-api` debe volver a aparecer con estado
-`online` y un contador de reinicios mayor.
+Los archivos `request.log` y `error.log` rotan al llegar a 5 MiB y conservan un
+máximo de cinco archivos cada uno.
 
 ## Proxy inverso con Nginx
 

@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const { errors } = require('celebrate');
 const usersRouter = require('./routes/users');
@@ -13,23 +12,12 @@ const {
   validateCreateUser,
   validateLogin,
 } = require('./middlewares/validation');
-const { MONGO_URL, PORT } = require('./config');
 
 const app = express();
-
-mongoose.connect(MONGO_URL)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.error('MongoDB connection error:', err));
 
 app.use(cors());
 app.use(express.json());
 app.use(requestLogger);
-
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Server will crash now');
-  }, 0);
-});
 
 app.post('/signin', validateLogin, login);
 app.post('/signup', validateCreateUser, createUser);
@@ -45,11 +33,5 @@ app.use((req, res, next) => {
 app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
-
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
-}
 
 module.exports = app;
